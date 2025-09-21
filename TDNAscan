@@ -1,0 +1,1 @@
+python tdnascan.py -1 MC4_pooled1_1.fq -2 MC4_pooled1_2.fq -t t-dna.fa -g 10.fasta -p tdna
