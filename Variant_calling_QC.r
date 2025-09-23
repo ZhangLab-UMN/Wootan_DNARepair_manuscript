@@ -117,3 +117,19 @@ setkey(PASS3, CHROM, start, stop)
 PASS3$IG <- !PASS3$genic  # Intergenic regions
 PASS3$loc <- ifelse(PASS3$genic, "genic", "intergenic")
 fwrite(PASS3, "/data/WTMut_HS_mutations_all.csv")
+
+
+### negative binomial glm 
+library(ggplot2)
+library(prettyglm)
+library(dplyr)
+library(multcomp)
+library(emmeans)                                            
+nb_model <- glm.nb(variant_count ~ treatment * genotype + offset(log(read_depth)), data = percent_norm)
+
+# Estimated marginal means for all treatment × genotype combinations
+emm <- emmeans(nb_model, ~ treatment * genotype, offset = log(mean(percent_norm$read_depth)))
+
+# do pairwise comparisons to get pvalues
+pairs(emm, adjust = "tukey")  # adjust p-values for multiple comparisons                                           
+                                            
